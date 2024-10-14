@@ -23,20 +23,25 @@ def sort(keypoints):
         elif keypoint.shape[0] == 1: # if there is only one keypoint, bind it to the closest previous neighbour
 
             # Taking the y coordinate as a better association feature
+
             if np.abs(keypoint[0].pt[1] - keypoint_data.loc[index-1, 'Y_1(microns)']) < np.abs(keypoint[0].pt[1] - keypoint_data.loc[index-1, 'Y_2(microns)']):
+
                 keypoint_data.loc[index, 'Radius_1(microns)'] = keypoint[0].size/2
                 keypoint_data.loc[index, 'Radius_2(microns)'] = 0
                 keypoint_data.loc[index, 'X_1(microns)'] = keypoint[0].pt[0]
                 keypoint_data.loc[index, 'X_2(microns)'] = 0
                 keypoint_data.loc[index, 'Y_1(microns)'] = keypoint[0].pt[1]
                 keypoint_data.loc[index, 'Y_2(microns)'] = 0
+
             else:
+
                 keypoint_data.loc[index, 'Radius_1(microns)'] = 0
                 keypoint_data.loc[index, 'Radius_2(microns)'] = keypoint[0].size
-                keypoint_data.loc[index, 'X_1(microns)'] = -0
+                keypoint_data.loc[index, 'X_1(microns)'] = 0
                 keypoint_data.loc[index, 'X_2(microns)'] = keypoint[0].pt[0]
                 keypoint_data.loc[index, 'Y_1(microns)'] = 0
                 keypoint_data.loc[index, 'Y_2(microns)'] = keypoint[0].pt[1]
+
 
         else: # If no points, set everything to 0
 
@@ -52,15 +57,18 @@ def sort(keypoints):
     keypoint_data = keypoint_data / scale
     time_step = 1 / camera_freq # in microsecs
 
-    # To minimise detection errors, the zero points will be averaged between the 2 closest neighbours by interpolation
-    # due to the initial pseudo-linear trend
+    # Replacing 0 values with NaN for interpolation
 
-    keypoint_data['Radius_1(microns)'].interpolate(method='linear', limit_direction='both')
-    keypoint_data['Radius_2(microns)'].interpolate(method='linear', limit_direction='both')
-    keypoint_data['X_1(microns)'].interpolate(method='linear', limit_direction='both')
-    keypoint_data['Y_1(microns)'].interpolate(method='linear', limit_direction='both')
-    keypoint_data['X_2(microns)'].interpolate(method='linear', limit_direction='both')
-    keypoint_data['Y_2(microns)'].interpolate(method='linear', limit_direction='both')
+    keypoint_data = keypoint_data.astype(float).replace(0, np.nan)
+
+    # We use nearest neighbour interpolation to fill in missing data
+
+    keypoint_data['Radius_1(microns)'] = keypoint_data['Radius_1(microns)'].interpolate(method='nearest', limit_direction='both')
+    keypoint_data['Radius_2(microns)'] = keypoint_data['Radius_2(microns)'].interpolate(method='nearest', limit_direction='both')
+    keypoint_data['X_1(microns)'] = keypoint_data['X_1(microns)'].interpolate(method='nearest', limit_direction='both')
+    keypoint_data['Y_1(microns)'] = keypoint_data['Y_1(microns)'].interpolate(method='nearest', limit_direction='both')
+    keypoint_data['X_2(microns)'] = keypoint_data['X_2(microns)'].interpolate(method='nearest', limit_direction='both')
+    keypoint_data['Y_2(microns)'] = keypoint_data['Y_2(microns)'].interpolate(method='nearest', limit_direction='both')
 
     # Measurements
 
@@ -73,4 +81,4 @@ def sort(keypoints):
 
     keypoint_data['Time(microsecs)'] = np.arange(keypoints.shape[0]) * time_step # Populating time column
 
-    print(keypoint_data)
+    return keypoint_data
