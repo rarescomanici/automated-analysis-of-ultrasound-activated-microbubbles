@@ -4,7 +4,7 @@ import data_extraction, image_processing, sort_data
 
 
 # finding desired data path and extracting at path
-data_path = 'C:\\Users\\Rares\\Desktop\\bubbles\\bubble_data\\Cordin 1 Prentice set\\Data Analysis Project - URG\\Best of Close to Sub\\0.2v parallel config'
+data_path = 'C:\\Users\\Rares\\Desktop\\bubbles\\bubble_data\\Cordin 1 Prentice set\\Data Analysis Project - URG\\Best of Close to Sub\\0.2v perp config'
 data_files = os.listdir(data_path)
 
 os.makedirs('data', exist_ok=True) # creating output folder

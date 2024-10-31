@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # sorts relevant keypoint data into pandas dataframe
 def sort(keypoints):
@@ -24,7 +26,16 @@ def sort(keypoints):
 
             # Taking the y coordinate as a better association feature
 
-            if np.abs(keypoint[0].pt[1] - keypoint_data.loc[index-1, 'Y_1(microns)']) < np.abs(keypoint[0].pt[1] - keypoint_data.loc[index-1, 'Y_2(microns)']):
+            if index == 0:
+
+                keypoint_data.loc[index, 'Radius_1(microns)'] = keypoint[0].size/2
+                keypoint_data.loc[index, 'Radius_2(microns)'] = 0
+                keypoint_data.loc[index, 'X_1(microns)'] = keypoint[0].pt[0]
+                keypoint_data.loc[index, 'X_2(microns)'] = 0
+                keypoint_data.loc[index, 'Y_1(microns)'] = keypoint[0].pt[1]
+                keypoint_data.loc[index, 'Y_2(microns)'] = 0
+
+            elif np.abs(keypoint[0].pt[1] - keypoint_data.loc[index-1, 'Y_1(microns)']) < np.abs(keypoint[0].pt[1] - keypoint_data.loc[index-1, 'Y_2(microns)']):
 
                 keypoint_data.loc[index, 'Radius_1(microns)'] = keypoint[0].size/2
                 keypoint_data.loc[index, 'Radius_2(microns)'] = 0
@@ -80,5 +91,11 @@ def sort(keypoints):
     keypoint_data['Volume_2(microns^3)'] = 4*np.pi*keypoint_data['Radius_2(microns)']**3/3
 
     keypoint_data['Time(microsecs)'] = np.arange(keypoints.shape[0]) * time_step # Populating time column
+
+    # plot
+    #sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Centroid_Distance(microns)'])
+    #sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Radius_1(microns)'])
+    #sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Radius_2(microns)'])
+    plt.show()
 
     return keypoint_data
