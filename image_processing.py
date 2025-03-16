@@ -90,6 +90,7 @@ def process(image_data):
 
         # # Show keypoints
         #cv2.imshow("Keypoints", im_with_keypoints)
+        #cv2.imwrite('image.jpg', im_with_keypoints)
         #cv2.waitKey(0)
 
         # appending to keypoint list
