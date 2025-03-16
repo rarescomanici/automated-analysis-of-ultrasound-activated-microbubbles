@@ -1,6 +1,6 @@
 # importing working and plotting libs
 import os
-import data_extraction, image_processing, sort_data
+import data_extraction, image_processing, sort_data, bjerknes_force
 
 
 # finding desired data path and extracting at path
@@ -22,8 +22,11 @@ for data_file in data_files: # looping through files
     # sorting data
     final_data = sort_data.sort(keypoint_data)
 
+    # bjerknes force analysis
+    final_bjerknes = bjerknes_force.compute(final_data)
+
     # writing dataframe to csv
-    final_data.to_csv(f'data/{data_file}.csv', index=False)
+    final_bjerknes.to_csv(f'data/{data_file}.csv', index=False)
 
 
 

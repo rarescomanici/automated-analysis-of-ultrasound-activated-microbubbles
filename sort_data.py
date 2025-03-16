@@ -96,6 +96,6 @@ def sort(keypoints):
     #sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Centroid_Distance(microns)'])
     #sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Radius_1(microns)'])
     #sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Radius_2(microns)'])
-    plt.show()
+    #plt.show()
 
     return keypoint_data
