@@ -93,9 +93,19 @@ def sort(keypoints):
     keypoint_data['Time(microsecs)'] = np.arange(keypoints.shape[0]) * time_step # Populating time column
 
     # plot
-    #sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Centroid_Distance(microns)'])
-    #sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Radius_1(microns)'])
-    #sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Radius_2(microns)'])
+    #ax1 = sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Radius_1(microns)'],
+                      #linestyle='--', marker='o')
+    #error1 = np.ones(keypoint_data['Radius_1(microns)'].shape)/scale+keypoint_data['Radius_1(microns)']*0.05
+    #ax1.errorbar(keypoint_data['Time(microsecs)'], keypoint_data['Radius_1(microns)'], yerr=error1, fmt='o', color='b', alpha=0.5)
+
+    #ax2 = sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Radius_2(microns)'],
+                       #linestyle='--', marker='o')
+    #error2 = np.ones(keypoint_data['Radius_2(microns)'].shape)/scale+keypoint_data['Radius_2(microns)']*0.05
+    #ax2.errorbar(keypoint_data['Time(microsecs)'], keypoint_data['Radius_2(microns)'], yerr=error2, fmt='o', color='r', alpha=0.5)
+    #ax1 = sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Centroid_Distance(microns)'],
+                       #linestyle='--', marker='o')
+    #error1 =4*np.ones(keypoint_data['Centroid_Distance(microns)'].shape)/scale
+    #ax1.errorbar(keypoint_data['Time(microsecs)'], keypoint_data['Centroid_Distance(microns)'], yerr=error1, fmt='o', color='b', alpha=0.5)
     #plt.show()
 
     return keypoint_data
