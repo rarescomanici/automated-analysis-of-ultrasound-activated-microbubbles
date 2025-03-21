@@ -3,6 +3,9 @@ import os
 import data_extraction, image_processing, sort_data, bjerknes_force
 import pandas as pd
 import numpy as np
+import scipy
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 # finding desired data path and extracting at path
@@ -35,13 +38,24 @@ for data_file in data_files: # looping through files
     # writing dataframe to csv
     final_bjerknes.to_csv(f'data/{data_file}.csv', index=False)
 
+#assembling time fft data
 camera_freq = 1.267326 # camera frequency in MHz
 time_step = 1 / camera_freq # in microsecs
 
+fft_data = fft_data.dropna()
 time = np.arange(fft_data.shape[0])*time_step
 fft_data['Time(microsecs)'] = time
 
 fft_data.to_csv(f'data/fft_data.csv', index=False)
+
+#truncating fft data to n=6
+#fft_data_6 = fft_data[:64]
+#fft_r2 = scipy.fft.fft(fft_data_6['Radius_2(microns)'])
+
+#sns.lineplot(fft_r2**2)
+#plt.show()
+
+
 
 
 
