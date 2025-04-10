@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # finds the bjerknes force for the first 8 frames of the sequence (t=0s -> t=6.31s) where oscillation is stable
 def compute(data):
@@ -19,6 +21,14 @@ def compute(data):
     # this brings the mean close to 0, and makes the movement easier to analyse
     wave_1 = stable_frames['Radius_1(microns)'] - r_01
     wave_2 = stable_frames['Radius_2(microns)'] - r_02
+
+    # graphing wave
+    # = sns.lineplot(x=stable_frames['Time(microsecs)'], y=wave_1,
+                       #linestyle='--', marker='o')
+    #ax1.set_title('Radial oscillations vs. time', fontdict={'size': 12, 'weight': 'bold'})
+    #error1 = wave_1*0.2
+    #ax1.errorbar(stable_frames['Time(microsecs)'], wave_1, yerr=np.abs(error1), fmt='o', color='b', alpha=0.5)
+    #plt.show()
 
     # to find the amplitude, take the farthest antinode from the mean
     max_1, min_1 = wave_1.max(), wave_1.min()

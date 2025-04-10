@@ -92,20 +92,46 @@ def sort(keypoints):
 
     keypoint_data['Time(microsecs)'] = np.arange(keypoints.shape[0]) * time_step # Populating time column
 
+    # standard deviation and mean
+    sigma_1 = np.std(keypoint_data['Radius_1(microns)'])
+    sigma_2 = np.std(keypoint_data['Radius_2(microns)'])
+    sigma_3 = np.std(keypoint_data['Centroid_Distance(microns)'])
+
+    mu_1 = np.mean(keypoint_data['Radius_1(microns)'])
+    mu_2 = np.mean(keypoint_data['Radius_2(microns)'])
+    mu_3 = np.mean(keypoint_data['Centroid_Distance(microns)'])
+
+    # find outliers (more than 3 sigma away)
+    outliers_1 = keypoint_data['Radius_1(microns)'][(keypoint_data['Radius_1(microns)'] < mu_1-3*sigma_1) | (keypoint_data['Radius_1(microns)'] > mu_1+3*sigma_1)].shape[0]
+    outliers_2 = keypoint_data['Radius_2(microns)'][(keypoint_data['Radius_2(microns)'] < mu_2-3*sigma_2) | (keypoint_data['Radius_2(microns)'] > mu_2+3*sigma_2)].shape[0]
+    outliers_3 = keypoint_data['Centroid_Distance(microns)'][(keypoint_data['Centroid_Distance(microns)'] < mu_3-3*sigma_3) | (keypoint_data['Centroid_Distance(microns)'] > mu_3+3*sigma_3)].shape[0]
+
+    # find CI by checking 2 sigma; the signal lasts until frame 64
+    CI_1 = (64-keypoint_data['Radius_1(microns)'][(keypoint_data['Radius_1(microns)'] < mu_1-2*sigma_1) | (keypoint_data['Radius_1(microns)'] > mu_1+2*sigma_1)].shape[0])/64
+    CI_2 = (64-keypoint_data['Radius_2(microns)'][(keypoint_data['Radius_2(microns)'] < mu_2-2*sigma_2) | (keypoint_data['Radius_2(microns)'] > mu_2+2*sigma_2)].shape[0])/64
+    CI_3 = (64-keypoint_data['Centroid_Distance(microns)'][(keypoint_data['Centroid_Distance(microns)'] < mu_3-2*sigma_3) | (keypoint_data['Centroid_Distance(microns)'] > mu_3+2*sigma_3)].shape[0])/64
+
+    #print(sigma_3, CI_3)
+
     # plot
     #ax1 = sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Radius_1(microns)'],
                       #linestyle='--', marker='o')
     #error1 = np.ones(keypoint_data['Radius_1(microns)'].shape)/scale+keypoint_data['Radius_1(microns)']*0.05
     #ax1.errorbar(keypoint_data['Time(microsecs)'], keypoint_data['Radius_1(microns)'], yerr=error1, fmt='o', color='b', alpha=0.5)
+    #ax1.set_title('Radius vs. time', fontdict={'size': 12, 'weight': 'bold'})
 
     #ax2 = sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Radius_2(microns)'],
                        #linestyle='--', marker='o')
     #error2 = np.ones(keypoint_data['Radius_2(microns)'].shape)/scale+keypoint_data['Radius_2(microns)']*0.05
     #ax2.errorbar(keypoint_data['Time(microsecs)'], keypoint_data['Radius_2(microns)'], yerr=error2, fmt='o', color='r', alpha=0.5)
-    #ax1 = sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Centroid_Distance(microns)'],
+    #ax2.set_title('Radius vs. time', fontdict={'size': 12, 'weight': 'bold'})
+
+    #ax3 = sns.lineplot(data=keypoint_data, x=keypoint_data['Time(microsecs)'], y=keypoint_data['Centroid_Distance(microns)'],
                        #linestyle='--', marker='o')
-    #error1 =4*np.ones(keypoint_data['Centroid_Distance(microns)'].shape)/scale
-    #ax1.errorbar(keypoint_data['Time(microsecs)'], keypoint_data['Centroid_Distance(microns)'], yerr=error1, fmt='o', color='b', alpha=0.5)
-    #plt.show()
+    #error3 = np.ones(keypoint_data['Centroid_Distance(microns)'].shape)/scale+keypoint_data['Centroid_Distance(microns)']*0.05
+    #ax3.errorbar(keypoint_data['Time(microsecs)'], keypoint_data['Centroid_Distance(microns)'], yerr=error3, fmt='o', color='b', alpha=0.5)
+    #ax3.set_title('Centroid distance vs. time', fontdict={'size': 12, 'weight': 'bold'})
+
+    plt.show()
 
     return keypoint_data
